@@ -1,42 +1,81 @@
 package org.example;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
-import java.util.stream.DoubleStream;
 
 public class Calculadora {
 
     private static final Logger logger = Logger.getLogger(Calculadora.class.getName());
+    List<Integer> myListOne = Arrays.asList(1, 5, 3, 6, 8);
+    List<Integer> myListTwo = Arrays.asList(1, 3, 8, 7);
+    AtomicInteger index = new AtomicInteger();
+
     public void suma() {
-        DoubleStream stream1 = DoubleStream.of(1,2,3);
-        DoubleStream stream2 = DoubleStream.of(1,2,3);
-        DoubleStream.concat(stream1,stream2)
-                .reduce(Double::sum)
-                .ifPresent(element -> logger.info("Suma "+ element));
+        if (myListTwo.size() > myListOne.size() || myListTwo.size() == myListOne.size()) {
+            myListOne.stream()
+                    .map(element -> element + myListTwo.get(index.getAndIncrement()))
+                    .forEach(element -> logger.info(String.valueOf(element)));
+        }
+        if (myListTwo.size() < myListOne.size()) {
+            myListTwo.stream()
+                    .map(element -> myListOne.get(index.getAndIncrement()) + element)
+                    .forEach(element -> logger.info(String.valueOf(element)));
+        }
+
     }
 
     public void multiplicacion() {
-        DoubleStream stream1 = DoubleStream.of(1,2,3);
-        DoubleStream stream2 = DoubleStream.of(1,2,3);
-        DoubleStream.concat(stream1,stream2)
-                .reduce((acumulador, numero)-> acumulador * numero)
-                .ifPresent(element -> logger.info("Multiplicacion "+ element));
+        if (myListTwo.size() > myListOne.size() || myListTwo.size() == myListOne.size()) {
+            myListOne.stream()
+                    .map(element -> element * myListTwo.get(index.getAndIncrement()))
+                    .forEach(element -> logger.info(String.valueOf(element)));
+        }
+        if (myListTwo.size() < myListOne.size()) {
+            myListTwo.stream()
+                    .map(element -> myListOne.get(index.getAndIncrement()) * element)
+                    .forEach(element -> logger.info(String.valueOf(element)));
+        }
     }
 
     public void resta() {
-        DoubleStream stream1 = DoubleStream.of(1,2,3);
-        DoubleStream stream2 = DoubleStream.of(1,2,3);
-        DoubleStream.concat(stream1,stream2)
-                .reduce((acumulador, numero)-> acumulador - numero)
-                .ifPresent(element -> logger.info("Resta "+ element));
+        if (myListTwo.size() > myListOne.size() || myListTwo.size() == myListOne.size()) {
+            myListOne.stream()
+                    .map(element -> element - myListTwo.get(index.getAndIncrement()))
+                    .forEach(element -> logger.info(String.valueOf(element)));
+        }
+        if (myListTwo.size() < myListOne.size()) {
+            myListTwo.stream()
+                    .map(element -> myListOne.get(index.getAndIncrement()) - element)
+                    .forEach(element -> logger.info(String.valueOf(element)));
+        }
     }
 
     public void division() {
-        DoubleStream stream1 = DoubleStream.of(1,2,0);
-        DoubleStream stream2 = DoubleStream.of(1,2,3);
-        DoubleStream.concat(stream1,stream2)
-                .filter(element -> element > 0)
-                .reduce((acumulador, numero)-> acumulador / numero)
-                .ifPresent(element -> logger.info("Division "+ element));
+        AtomicInteger indexTwo = new AtomicInteger();
+        List<Double> myListOne = Arrays.asList(1.0, 2.0, 3.0, 6.0, 8.0);
+        List<Double> myListTwo = Arrays.asList(1.0, 9.0, 0.0, 7.0);
+        if (myListTwo.size() > myListOne.size() || myListTwo.size() == myListOne.size()) {
+            myListOne.stream()
+                    .map(element -> {
+                        if (element == 0 || myListTwo.get(indexTwo.getAndIncrement()) == 0) {
+                            return 0;
+                        }
+                        return element / myListTwo.get(index.getAndIncrement());
+                    })
+                    .forEach(element -> logger.info(String.valueOf(element)));
+        }
+        if (myListTwo.size() < myListOne.size()) {
+            myListTwo.stream()
+                    .map(element -> {
+                        if (element == 0 || myListOne.get(indexTwo.getAndIncrement()) == 0) {
+                            return 0;
+                        }
+                        return myListOne.get(index.getAndIncrement()) / element;
+                    })
+                    .forEach(element -> logger.info(String.valueOf(element)));
+        }
     }
 
 
